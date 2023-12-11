@@ -1,0 +1,263 @@
+{%extends 'partials/base.html' %} {% load static %} {% block content %}
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="{% url 'core:index' %}" rel="nofollow"
+          ><i class="fi-rs-home mr-5"></i>Home</a
+        >
+        <span></span> <a href="{% url 'core:product_list' %}">Produtos</a>
+        <span></span> {{product.title}}
+      </div>
+    </div>
+  </div>
+  <div class="container mb-30">
+    <div class="row">
+      <div class="col-xl-11 col-lg-12 m-auto">
+        <div class="row" style="justify-content: center">
+          <div class="col-xl-9">
+            <div class="product-detail accordion-detail">
+              <div class="row mb-50 mt-30">
+                <div class="col-md-6 col-sm-12 col-xs-12 mb-md-0 mb-sm-5">
+                  <div class="detail-gallery">
+                    <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                    <!-- MAIN SLIDES -->
+                    <div class="product-image-slider">
+                      <figure class="border-radius-10">
+                        <img src="{{product.image.url}}" alt="product image" />
+                      </figure>
+                      {% for img in p_images %}
+                      <figure class="border-radius-10">
+                        <img src="{{img.images.url}}" alt="product image" />
+                      </figure>
+                      {% endfor %}
+                    </div>
+                    <!-- THUMBNAILS -->
+                    <div class="slider-nav-thumbnails">
+                      <div>
+                        <img src="{{product.image.url}}" alt="product image" />
+                      </div>
+                      {% for img in p_images %}
+                      <div>
+                        <img src="{{img.images.url}}" alt="product image" />
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <!-- End Gallery -->
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="detail-info pr-30 pl-30">
+                    <span class="stock-status out-stock"> Popular </span>
+                    <h2 class="title-detail">{{product.title}}</h2>
+                    <div class="product-detail-rating">
+                      <div class="product-rate-cover text-end">
+                        <div class="product-rate d-inline-block">
+                          <div
+                            class="product-rating"
+                            style="width: {{average_rating.rating}}%"
+                          ></div>
+                        </div>
+                        <span class="font-small ml-5 text-muted">
+                          ({{reviews.count}} comentarios)</span
+                        >
+                      </div>
+                    </div>
+                    <div class="clearfix product-price-cover">
+                      <div class="product-price primary-color float-left">
+                        <span
+                          class=" current-product-price-{{ product.id }} text-brand"
+                          style="font-size: 60px; font-weight: bold"
+                          >{{product.price}}</span
+                        ><span
+                          class="text-brand"
+                          style="font-size: 60px; font-weight: bold"
+                          >€</span
+                        >
+                        <span>
+                          <span class="save-price font-md color3 ml-15"
+                            >{{product.get_percentage|floatformat:0}}% Off</span
+                          >
+                          <span class="old-price font-md ml-15"
+                            >{{product.old_price}}€</span
+                          >
+                        </span>
+                      </div>
+                    </div>
+                    <div class="detail-extralink mb-50">
+                      <input
+                        type="number"
+                        value="1"
+                        name=""
+                        id="product-quantity"
+                        class="w-25 mb-10 product-quantity-{{product.id}}"
+                      />
+                      <br />
+                      <div class="product-extra-link2">
+                        <input
+                          type="hidden"
+                          class="product-pid-{{product.id}}"
+                          value="{{product.pid}}"
+                        />
+                        <input
+                          type="hidden"
+                          class="product-image-{{product.id}}"
+                          value="{{product.image.url}}"
+                        />
+                        <input
+                          type="hidden"
+                          class="product-id-{{product.id}}"
+                          value="{{ product.id }}"
+                        />
+                        <input
+                          type="hidden"
+                          class="product-title-{{product.id}}"
+                          value="{{ product.title }}"
+                        />
+                        <button
+                          class="add button add-to-cart-btn b-none"
+                          data-index="{{ product.id }}"
+                        >
+                          <i class="fi-rs-shopping-cart mr-5"></i>Add
+                        </button>
+                      </div>
+                    </div>
+                    <div class="font-xs">
+                      <ul class="float-start">
+                        <li class="mb-5">
+                          SKU: <a href="#">{{product.sku}}</a>
+                        </li>
+                        <li>
+                          Stock:<span class="in-stock text-brand ml-5"
+                            >{{product.stock_count}} items em stock</span
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Detail Info -->
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="tab-style3">
+                  <ul class="nav nav-tabs text-uppercase">
+                    <li class="nav-item">
+                      <a
+                        class="nav-link active"
+                        id="Description-tab"
+                        data-bs-toggle="tab"
+                        href="#Description"
+                        >Descrição</a
+                      >
+                    </li>
+                    <li class="nav-item">
+                      <a
+                        class="nav-link"
+                        id="Reviews-tab"
+                        data-bs-toggle="tab"
+                        href="#Reviews"
+                        >Comentários ({{ reviews.count }})</a
+                      >
+                    </li>
+                  </ul>
+                  <div class="tab-content shop_info_tab entry-main-content">
+                    <div class="tab-pane fade show active" id="Description">
+                      <div class="">
+                        <p>{{product.description}}</p>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="Reviews">
+                      <!--Comments-->
+                      <div class="comments-area">
+                        <div class="row">
+                          <div class="col-lg-8">
+                            <h4 class="mb-30">Comentários</h4>
+                            <div class="comment-list">
+                              {% for r in reviews %}
+                              <div
+                                class="single-comment justify-content-between d-flex mb-30"
+                              >
+                                <div
+                                  class="user justify-content-between d-flex"
+                                >
+                                  <div class="thumb text-center">
+                                    <a href="#" class="font-heading text-brand"
+                                      >{{r.user.username}}</a
+                                    >
+                                  </div>
+                                  <div class="desc">
+                                    <div
+                                      class="d-flex justify-content-between mb-10"
+                                    >
+                                      <div class="d-flex align-items-center">
+                                        <span class="font-xs text-muted"
+                                          >{{r.date|date:"d M, Y"}}
+                                        </span>
+                                      </div>
+                                      <div class="product-rate d-inline-block">
+                                        <div
+                                          class="product-rating"
+                                          style="width: {{r.rating}}%;"
+                                        ></div>
+                                      </div>
+                                    </div>
+                                    <p class="mb-10">{{r.review}}</p>
+                                  </div>
+                                </div>
+                              </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--comment form-->
+                      <div class="comment-form">
+                        <h4 class="mb-15">Add a review</h4>
+                        <div class="row">
+                          <div class="col-lg-8 col-md-12">
+                            <form
+                              class="form-contact comment_form"
+                              action="{% url 'core:add-review' product.pid %}"
+                              id="commentForm"
+                              method="POST"
+                            >
+                              {% csrf_token %}
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    {{review_form.review}}
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-12">
+                                    <div class="form-group">
+                                      {{review_form.rating}}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <button
+                                  type="submit"
+                                  class="button button-contactForm"
+                                >
+                                  Submit Review
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
