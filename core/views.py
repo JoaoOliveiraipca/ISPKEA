@@ -216,3 +216,6 @@ def place_order(request):
           return redirect("core:index") 
      
 
+def about_us_view(request):
+     
+     return render(request, 'core/about-us.html')
